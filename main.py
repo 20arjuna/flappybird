@@ -1,6 +1,10 @@
 import pygame
 import sys
 from sprites.bird import Bird
+import os
+
+os.environ['SDL_VIDEO_WINDOW_POS'] = "100,100" # Just moves game window to laptop screen instead of monitor
+
 
 # Initialize Pygame
 pygame.init()
@@ -32,6 +36,8 @@ def main():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+                elif event.key == pygame.K_SPACE:
+                    bird.flap()
 
         # Update bird physics
         bird.update()
