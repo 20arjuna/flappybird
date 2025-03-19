@@ -1,8 +1,10 @@
 import pygame
 
 YELLOW = (255, 255, 0)
-GRAVITY = 0.25  # Gravity constant
-MAX_VELOCITY = 2  # Maximum falling speed
+GRAVITY = 0.5  # Gravity constant
+MAX_DOWN_VELOCITY = 12  # Maximum falling speed
+MAX_UP_VELOCITY = 8  # Maximum rising speed
+FLAP_COOLDOWN = 150  # Cooldown in milliseconds
 
 class Bird:
     def __init__(self):
@@ -11,24 +13,30 @@ class Bird:
         self.width = 40
         self.height = 30  # Made height smaller for oval shape
         self.velocity = 0  # Add vertical velocity
-        self.flap_strength = -50  # Negative because up is negative y
+        self.flap_strength = 25  # Negative because up is negative y
         self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.last_flap_time = 0  # Track when we last flapped
 
     def flap(self):
         # self.y += self.flap_strength
-        print("flapping")
-        self.velocity = 0
-        self.y -= 75
-
-        # self.y += self.flap_strength
-        # self.velocity = 0
-
+        current_time = pygame.time.get_ticks()
+        if current_time - self.last_flap_time >= FLAP_COOLDOWN:
+            self.velocity -= self.flap_strength
+            self.last_flap_time = current_time
+            print("flapping")
+        
     def update(self):
         # Apply gravity to velocity
         self.velocity += GRAVITY
         
         # Limit falling speed
-        self.velocity = max(self.velocity, MAX_VELOCITY)
+        if self.velocity > MAX_DOWN_VELOCITY:
+            self.velocity = MAX_DOWN_VELOCITY
+        if self.velocity < -MAX_UP_VELOCITY:
+            self.velocity = -MAX_UP_VELOCITY
+
+        print(self.velocity)
+       #self.velocity = max(self.velocity, MAX_VELOCITY)
     
         # Update position based on velocity
         self.y += self.velocity
