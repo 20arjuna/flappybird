@@ -1,6 +1,7 @@
 import pygame
 import sys
 from sprites.bird import Bird
+from sprites.pipe import Pipe
 import os
 
 os.environ['SDL_VIDEO_WINDOW_POS'] = "100,100" # Just moves game window to laptop screen instead of monitor
@@ -28,6 +29,8 @@ clock = pygame.time.Clock()
 def main():
     running = True
     bird = Bird()
+    pipes = [Pipe(1000), Pipe(1300)]  # Create two pipes with different starting positions
+
     while running:
         # Event handling
         for event in pygame.event.get():
@@ -42,11 +45,19 @@ def main():
         # Update bird physics
         bird.update()
 
+        # Update pipes
+        for pipe in pipes:
+            pipe.update()
+
         # Clear the screen
         screen.fill(LIGHT_BLUE)
 
         # Draw the bird
         bird.draw(screen)
+
+        # Draw the pipes
+        for pipe in pipes:
+            pipe.draw(screen)
 
         # Update the display
         pygame.display.flip()
