@@ -5,12 +5,22 @@ GREEN = (0, 255, 0)
 LIGHT_BLUE = (135, 206, 235)
 PIPE_WIDTH = 80
 PIPE_HEIGHT = 600
-GAP_HEIGHT = 200  # Height of the gap
+GAP_HEIGHT = 150  # Height of the gap
 
 class Pipe:
     def __init__(self, x):
         self.x = x
-        self.speed = 3  # How fast pipe moves left
+        self.speed = 4
+        
+        # Create surfaces for pipe and gap
+        self.pipe_surface = pygame.Surface((PIPE_WIDTH, PIPE_HEIGHT))
+        self.pipe_surface.fill(GREEN)
+        self.gap_surface = pygame.Surface((PIPE_WIDTH, GAP_HEIGHT))
+        self.gap_surface.fill(LIGHT_BLUE)
+        
+        # Create masks for collision detection
+        self.pipe_mask = pygame.mask.from_surface(self.pipe_surface)
+        self.gap_mask = pygame.mask.from_surface(self.gap_surface)
         
         # Randomly position the gap
         self.gap_y = random.randint(100, 400)
@@ -30,7 +40,7 @@ class Pipe:
             self.reset()
     
     def reset(self):
-        self.x = 1000  # Move to right side of screen
+        self.x = 800  # Move to right side of screen
         self.gap_y = random.randint(100, 400)  # New random gap position
         self.pipe_rect.x = self.x
         self.gap_rect.x = self.x

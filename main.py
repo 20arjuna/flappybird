@@ -11,7 +11,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "100,100" # Just moves game window to lapto
 pygame.init()
 
 # Constants
-WINDOW_WIDTH = 1000
+WINDOW_WIDTH = 800
 WINDOW_HEIGHT = 600
 FPS = 60
 
@@ -29,7 +29,7 @@ clock = pygame.time.Clock()
 def main():
     running = True
     bird = Bird()
-    pipes = [Pipe(1000), Pipe(1300)]  # Create two pipes with different starting positions
+    pipes = [Pipe(800), Pipe(1100), Pipe(1400)]  # Create two pipes with different starting positions
 
     while running:
         # Event handling
@@ -48,16 +48,21 @@ def main():
         # Update pipes
         for pipe in pipes:
             pipe.update()
+            # Check for collisions
+            if bird.check_collision(pipe):
+                # Handle collision (game over, etc.)
+                running = False
+
 
         # Clear the screen
         screen.fill(LIGHT_BLUE)
 
-        # Draw the bird
-        bird.draw(screen)
-
-        # Draw the pipes
+        # Draw the pipes first (so they appear behind the bird)
         for pipe in pipes:
             pipe.draw(screen)
+
+        # Draw the bird last (so it appears on top)
+        bird.draw(screen)
 
         # Update the display
         pygame.display.flip()
